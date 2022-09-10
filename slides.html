@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Giuseppe Marino">
+  <title>Modello Gray-Scott parallelo</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/white.css" id="theme">
+  <script defer=""
+  src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Modello Gray-Scott parallelo</h1>
+  <p class="author">Giuseppe Marino</p>
+  <p class="date">19 gennaio 2021</p>
+</section>
+
+<section>
+<section id="modello-di-gray-scott" class="title-slide slide level2">
+<h2>Modello di Gray-Scott</h2>
+<div style="text-align: left; font-size: 0.9em">
+<p>Modella un processo che consiste <strong>reazioni</strong> e
+<strong>diffusioni</strong>, descritto tramite un sistema di
+equazioni.</p>
+<p>Descrive la reazione chimica tra due sostanze <span
+class="math inline">U</span> e <span class="math inline">V</span> che si
+diffondono nello spazio in funzione del tempo.</p>
+<p>Durante la reazione si <strong>consuma</strong> <span
+class="math inline">U</span> per <strong>produrre</strong> <span
+class="math inline">V</span>.</p>
+<p>Nella simulazione rappresentiamo le densità <span
+class="math inline">u</span> e <span class="math inline">v</span> nel
+tempo e nello spazio usando una successione di matrici quadrate.</p>
+</div>
+</section>
+<section id="i-parametri-del-sistema" class="slide level3">
+<h3>I parametri del sistema</h3>
+<p>In questo modello sono presenti due parametri</p>
+<div style="text-align: left; font-size: 0.75em">
+<ul>
+<li><span class="math inline">F</span> è il <em>feeding rate</em>:
+regola la velocità con cui <span class="math inline">U</span> viene
+reintrodotta<br />
+</li>
+<li><span class="math inline">k</span> è il <em>decay rate</em>: regola
+la velocità con cui <span class="math inline">V</span> viene
+rimossa</li>
+</ul>
+</div>
+<div style="font-size: 0.75em">
+<p><img data-src="res/some.png" /></p>
+<p>Al variare di <span class="math inline">F</span> e <span
+class="math inline">k</span> si ottengono <strong>vari pattern</strong>,
+alcuni dei quali simili a quelli osservati in <strong>organismi
+viventi</strong>.</p>
+</div>
+</section>
+<section id="le-reazioni" class="slide level3">
+<h3>Le reazioni</h3>
+<p>Il sistema modella le seguenti <strong>reazioni
+chimiche</strong>:</p>
+<div style="text-align: left; font-size: 0.75em">
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li><span class="math inline">U + 2V \to 3V</span></li>
+<li><span class="math inline">V \to P</span><br />
+</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<div style="text-align: right;">
+<ul>
+<li><span class="math inline">U</span> reagisce in <span
+class="math inline">V</span> in presenza di <span
+class="math inline">V</span> (catalizzatore)</li>
+<li><span class="math inline">V</span> decade in <span
+class="math inline">P</span> (sostanza inerte)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="le-diffusioni" class="slide level3">
+<h3>Le diffusioni</h3>
+<p>Le sostanze si <strong>diffondono nello spazio</strong> secondo le
+velocità di diffusione <span class="math inline">D_u</span> e <span
+class="math inline">D_v</span>.</p>
+<p>Nel nostro caso <span class="math inline">D_u = 2D_v</span> per
+garantire la <strong>formazione di pattern</strong>.</p>
+</section>
+<section id="le-equazioni" class="slide level3">
+<h3>Le equazioni</h3>
+<p>Giungiamo ad un <strong>sistema di due equazioni</strong> che
+descrivono il comportamento dei due reagenti:</p>
+<div style="text-align: center; font-size: 0.75em">
+<p><span class="math inline">\frac{\partial u}{\partial t}=-u
+v^{2}+F(1-u)+D_{u} \nabla^2 u</span></p>
+<p><span class="math inline">\frac{\partial v}{\partial t}=u v^{2}-(F+k)
+v+D_{v} \nabla^2 v</span></p>
+</div>
+</section>
+<section id="nella-simulazione" class="slide level3">
+<h3>Nella simulazione</h3>
+<p>Il <strong>laplaciano</strong> è valutato
+<strong>numericamente</strong> secondo la formula</p>
+<div style="font-size: 0.75em">
+<p><span class="math inline">\nabla^2 u_{i, j} \approx u_{i,
+j-1}+u_{i-1, j}-4 u_{i, j}+u_{i+1, j}+u_{i, j+1}</span></p>
+</div>
+<p><br></p>
+<p>Si ricorre al <strong>metodo di Eulero</strong> per integrare la
+<strong>derivata temporale</strong></p>
+</section>
+<section id="section" class="slide level3"
+data-background-video="res/512.mp4">
+<h3 data-background-video="res/512.mp4"></h3>
+</section></section>
+<section>
+<section id="codice-sequenziale" class="title-slide slide level1"
+data-transition="zoom">
+<h1 data-transition="zoom">Codice sequenziale</h1>
+<div class="fragment">
+<p>I punti salienti</p>
+</div>
+</section>
+<section id="inizializzazione" class="title-slide slide level2"
+style="text-align: center; font-size: 0.75em">
+<h2>Inizializzazione</h2>
+<p>Inizializziamo <strong>due matrici</strong> che rappresenteranno le
+<strong>densità</strong> dei due reagenti nello spazio.</p>
+<p>Inseriamo in punti a caso delle <strong>concentrazioni non
+nulle</strong> di <span class="math inline">v</span></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> np.random.rand(<span class="op">*</span>shape) <span class="op">&lt;</span> spawn_probability</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>mask <span class="op">=</span> morphology.dilation(mask, disk(<span class="dv">3</span>))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.ones_like(mask)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>v <span class="op">=</span> np.zeros_like(mask)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>v[mask] <span class="op">=</span> <span class="fl">0.50</span></span></code></pre></div>
+</section>
+
+<section id="laplaciano" class="title-slide slide level2"
+style="text-align: center; font-size: 0.75em">
+<h2>Laplaciano</h2>
+<p>Definiamo la seguente funzione per la valutazione del laplaciano che
+risolve il problema ai bordi impiegando un <strong>dominio
+periodico</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laplacian(r):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.vstack((r[<span class="op">-</span><span class="dv">1</span>], r, r[<span class="dv">0</span>]))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.vstack((r[:, <span class="op">-</span><span class="dv">1</span>], r.T, r[:, <span class="dv">0</span>])).T</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (           r[ :<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, :<span class="op">-</span><span class="dv">2</span>] <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>:] <span class="op">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                     <span class="op">+</span> r[<span class="dv">2</span>:  , <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] )</span></code></pre></div>
+</section>
+
+<section id="gray-scott" class="title-slide slide level2">
+<h2>Gray-Scott</h2>
+<div style="text-align: left; font-size: 0.75em">
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gray_scott(...):</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iterations):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iteration_steps):</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      reaction_rate <span class="op">=</span> u <span class="op">*</span> v <span class="op">*</span> v</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>      u <span class="op">+=</span> (u_diff_rate <span class="op">*</span> laplacian(u) <span class="op">-</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>            reaction_rate <span class="op">+</span> feed_rate <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> u))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      v <span class="op">+=</span> (v_diff_rate <span class="op">*</span> laplacian(v) <span class="op">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="op">+</span> reaction_rate <span class="op">-</span> (feed_rate <span class="op">+</span> decay_rate) <span class="op">*</span> v)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> u, v</span></code></pre></div>
+</div>
+<div style="text-align: left; font-size: 0.65em">
+<p>Per ogni <strong>iterazione</strong> viene restituito un output,
+all’interno di ogni interazione avvengono più <strong>passi di
+evoluzione</strong> del dominio.</p>
+<p>L’output consiste nelle matrici <span class="math inline">u</span> e
+<span class="math inline">v</span> aggiornate secondo le variazioni
+descritte dallo schema numerico.</p>
+</div>
+</section>
+</section>
+<section>
+<section id="codice-parallelo" class="title-slide slide level1"
+data-transition="zoom">
+<h1 data-transition="zoom">Codice parallelo</h1>
+<div class="fragment">
+<p>L’impiego di MPI4PY</p>
+</div>
+</section>
+<section id="la-parallelizzazione" class="title-slide slide level2">
+<h2>La parallelizzazione</h2>
+<div style="font-size: 0.75em">
+<p>Per rendere il codice sequenziale parallelizzato tramite
+<strong>MPI</strong> occorre:</p>
+<div>
+<ul>
+<li class="fragment">Eseguire lo <strong>scatter</strong> preliminare
+delle matrici di partenza</li>
+<li class="fragment">Gestire i <strong>send</strong> e i
+<strong>receive</strong> per la comunicazione dei bordi</li>
+<li class="fragment">Eseguire un <strong>gather</strong> prima di
+restituire le matrici</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="definizione-dei-rank" class="slide level3">
+<h3>Definizione dei rank</h3>
+<div style="font-size: 0.75em">
+<p>Ad ogni core attribuiamo un core <strong>precedente</strong> ed un
+core <strong>successivo</strong></p>
+<ul>
+<li><p>Per i core “<strong>interni</strong>” consideriamo i rank
+precedenti e successivi</p></li>
+<li><p>Per il <strong>primo</strong> core il precedente è
+l’<strong>ultimo</strong></p></li>
+<li><p>Per l’<strong>ultimo</strong> core il successivo è il
+<strong>primo</strong></p></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>...</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>curr_rank <span class="op">=</span> comm.rank</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>prev_rank <span class="op">=</span> (curr_rank <span class="op">-</span> <span class="dv">1</span>) <span class="op">%</span> comm.size</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>next_rank <span class="op">=</span> (curr_rank <span class="op">+</span> <span class="dv">1</span>) <span class="op">%</span> comm.size</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>...</span></code></pre></div>
+<blockquote>
+<p>anche perché il dominio è periodico</p>
+</blockquote>
+</div>
+</section>
+<section id="inizializzazione-1" class="slide level3">
+<h3>Inizializzazione</h3>
+<div style="font-size: 0.75em">
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><br> L’inizializzazione è a carico del core con rank 0 che sarà il
+nostro <strong>master</strong></p>
+</div><div class="column" style="width:60%;">
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gray_scott_MPI(...):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> comm.rank <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      u <span class="op">=</span> u.copy()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      v <span class="op">=</span> v.copy()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      u <span class="op">=</span> np.empty_like(u)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      v <span class="op">=</span> np.empty_like(v)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ...</span></code></pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="scatter" class="slide level3">
+<h3>Scatter</h3>
+<div style="font-size: 0.75em">
+<p>Ripartiamo le matrici del nostro dominio in in <strong>bande
+orizzontali</strong> di equa dimensione mediante lo scatter del dominio
+del core 0</p>
+<p>A ciascun core è assegnato un <strong>sottodominio</strong> sul quale
+applicare l’algoritmo</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gray_scott_MPI(...):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  ...</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  sub_u <span class="op">=</span> np.empty((height <span class="op">//</span> comm.size, width))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  sub_v <span class="op">=</span> np.empty((height <span class="op">//</span> comm.size, width))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  comm.Scatter(u, sub_u, root<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  comm.Scatter(v, sub_v, root<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  ...</span></code></pre></div>
+</div>
+</section>
+<section id="laplaciano-1" class="slide level3">
+<h3>Laplaciano</h3>
+<div style="font-size: 0.75em">
+<p>Occorre modificare il codice per valutare il laplaciano</p>
+<p>Gestire il problema ai <strong>bordi</strong> richiede la
+<strong>comunicazione</strong> tra core <strong>adiacenti</strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> laplacian(r):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  comm.Isend(r[<span class="dv">0</span>], dest<span class="op">=</span>prev_rank)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  comm.Isend(r[<span class="op">-</span><span class="dv">1</span>], dest<span class="op">=</span>next_rank)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  next_row <span class="op">=</span> np.empty(r[<span class="dv">0</span>].shape)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  prev_row <span class="op">=</span> np.empty(r[<span class="dv">0</span>].shape)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  comm.Recv(next_row, source<span class="op">=</span>next_rank)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  comm.Recv(prev_row, source<span class="op">=</span>prev_rank)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> np.vstack((prev_row, r, next_row))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  r <span class="op">=</span> np.vstack((r[:, <span class="op">-</span><span class="dv">1</span>], r.T, r[:, <span class="dv">0</span>])).T</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (           r[ :<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, :<span class="op">-</span><span class="dv">2</span>] <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> r[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>:] <span class="op">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>                   <span class="op">+</span> r[<span class="dv">2</span>:  , <span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>] )</span></code></pre></div>
+</div>
+</section>
+
+<section id="gray-scott-1" class="title-slide slide level2">
+<h2>Gray-Scott</h2>
+<div style="text-align: center; font-size: 0.75em">
+<p>La funzione per valutare Gray-Scott resta pressocché invariata, basta
+aggiungere il <strong>gather</strong> delle matrici prima di
+restituirle</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gray_scott_MPI(. . .):</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    . . .</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iterations):</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(iteration_steps):</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            reaction_rate <span class="op">=</span> sub_u <span class="op">*</span> sub_v <span class="op">*</span> sub_v</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            sub_u <span class="op">+=</span> (u_diff_rate <span class="op">*</span> laplacian(sub_u) <span class="op">-</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                      reaction_rate <span class="op">+</span> feed_rate <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> sub_u))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            sub_v <span class="op">+=</span> (v_diff_rate <span class="op">*</span> laplacian(sub_v) <span class="op">+</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                      <span class="op">+</span> reaction_rate <span class="op">-</span> (feed_rate <span class="op">+</span> decay_rate) <span class="op">*</span> sub_v)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        comm.Gather(sub_u, u, root<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>        comm.Gather(sub_v, v, root<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> curr_rank <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> u.copy(), v.copy()</span></code></pre></div>
+</div>
+</section>
+</section>
+<section>
+<section id="valutazione-delle-performance"
+class="title-slide slide level1" data-transition="zoom">
+<h1 data-transition="zoom">Valutazione delle performance</h1>
+<p>MacBook Air 2020</p>
+<p>Apple Silicon M1, 8 GB RAM, macOS 12.1</p>
+<ul>
+<li><p><code>iterations = 10</code></p></li>
+<li><p><code>iteration_steps = 250</code></p></li>
+</ul>
+</section>
+<section id="tempo-impiegato" class="title-slide slide level2">
+<h2>Tempo impiegato</h2>
+<p><strong><iframe width=730 height=500 src="plots/tempi.html"  ></iframe></strong></p>
+</section>
+
+<section id="guadagno-in-velocità" class="title-slide slide level2">
+<h2>Guadagno in velocità</h2>
+<iframe width="730" height="500" src="plots/speedup.html">
+</iframe>
+</section>
+
+<section id="efficienza" class="title-slide slide level2">
+<h2>Efficienza</h2>
+<iframe width="730" height="500" src="plots/efficienza.html">
+</iframe>
+</section>
+</section>
+<section>
+<section id="troppi-gather" class="title-slide slide level1"
+data-transition="zoom">
+<h1 data-transition="zoom">Troppi gather?</h1>
+
+</section>
+<section id="tempo-impiegato-dalle-comunicazioni-mpi"
+class="title-slide slide level2">
+<h2>Tempo impiegato dalle comunicazioni MPI</h2>
+
+</section>
+<section id="matrici-300x300" class="slide level3">
+<h3>Matrici 300x300</h3>
+<p><img src="plots/percentuale300.svg"></p>
+</section>
+<section id="matrici-400x400" class="slide level3">
+<h3>Matrici 400x400</h3>
+<p><img src="plots/percentuale400.svg"></p>
+</section>
+<section id="matrici-500x500" class="slide level3">
+<h3>Matrici 500x500</h3>
+<p><img src="plots/percentuale500.svg"></p>
+</section>
+<section id="matrici-600x600" class="slide level3">
+<h3>Matrici 600x600</h3>
+<p><img src="plots/percentuale600.svg"></p>
+</section>
+<section id="matrici-700x700" class="slide level3">
+<h3>Matrici 700x700</h3>
+<p><img src="plots/percentuale700.svg"></p>
+</section>
+</section>
+<section>
+<section id="considerazioni-sul-tipo-di-dato"
+class="title-slide slide level1" data-transition="zoom">
+<h1 data-transition="zoom">Considerazioni sul tipo di dato</h1>
+
+</section>
+<section id="float-32-vs-float-64" class="title-slide slide level2">
+<h2>Float 32 vs Float 64</h2>
+<p>I <strong>grafici precedenti</strong> sono il risultato dell’utilizzo
+di matrici di tipo <strong>float a 32 bit</strong>.</p>
+<p>Prove preliminari utilizzando dei <strong>float a 64 bit</strong>
+portavano a dei <strong>risultati inaspettati</strong>.</p>
+</section>
+
+<section id="tempi-di-calcolo" class="title-slide slide level2">
+<h2>Tempi di calcolo</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>float 32 <img src="plots/tempi.svg"></p>
+</div><div class="column" style="width:50%;">
+<p>float 64 <img src="plots/64/tempi.svg"></p>
+</div>
+</div>
+</section>
+
+<section id="guadagno-in-velocità-1" class="title-slide slide level2">
+<h2>Guadagno in velocità</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>float 32 <img src="plots/speedup.svg"></p>
+</div><div class="column" style="width:50%;">
+<p>float 64 <img src="plots/64/speedup.svg"></p>
+</div>
+</div>
+</section>
+<section id="efficienza-1" class="slide level3">
+<h3>Efficienza</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>float 32 <img src="plots/efficienza.svg"></p>
+</div><div class="column" style="width:50%;">
+<p>float 64 <img src="plots/64/efficienza.svg"></p>
+</div>
+</div>
+</section>
+
+<section id="considerazioni" class="title-slide slide level2">
+<h2>Considerazioni</h2>
+<p>Le operazioni con <strong>float 64</strong> impiegano circa il
+<strong>doppio del tempo</strong> rispetto a quelle con <strong>float
+32</strong>.</p>
+<p>A parità di dimensioni, una matrice <strong>float 64</strong> occupa
+il <strong>doppio della memoria</strong> rispetto ad una di tipo
+<strong>float 32</strong>.</p>
+</section>
+
+<section id="considerazioni-1" class="title-slide slide level2">
+<h2>Considerazioni</h2>
+<p>Arrivato ad un certo punto assistiamo ad un <strong>peggioramento
+sostanziale</strong>:</p>
+<p>È evidente con le matrici <strong>600x600</strong> e
+<strong>700x700</strong>, nelle esecuzioni con <strong>3</strong> e
+<strong>4</strong> core</p>
+</section>
+
+<section id="comunicazioni-troppo-impegnative"
+class="title-slide slide level2">
+<h2>Comunicazioni troppo impegnative?</h2>
+
+</section>
+<section id="tempo-impiegato-dalle-comunicazioni-600x600"
+class="slide level3">
+<h3>Tempo impiegato dalle comunicazioni 600x600</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>float 32 <img src="plots/percentuale600.svg"></p>
+</div><div class="column" style="width:50%;">
+<p>float 64 <img src="plots/64/percentuale600.svg"></p>
+</div>
+</div>
+</section>
+<section id="tempo-impiegato-dalle-comunicazioni-700x700"
+class="slide level3">
+<h3>Tempo impiegato dalle comunicazioni 700x700</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>float 32 <img src="plots/percentuale700.svg"></p>
+</div><div class="column" style="width:50%;">
+<p>float 64 <img src="plots/64/percentuale700.svg"></p>
+</div>
+</div>
+</section>
+
+<section id="alcune-teorie" class="title-slide slide level2">
+<h2>Alcune teorie</h2>
+<p>Ad esempio, una riga inviata o ricevuta può occupare <span
+class="math inline">700</span> celle <span
+class="math inline">\times</span> <span class="math inline">64</span>
+bit = <span class="math inline">44.800</span> bit = <span
+class="math inline">5.600</span> byte</p>
+<ul>
+<li><p>Considerando il mio processore Apple Silicon M1:</p>
+<ul>
+<li><p>Larghezza di banda UMA: 68.25 GB/s</p></li>
+<li><p>Cache di primo livello: 192 KB</p></li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section>
+<section id="conclusioni" class="title-slide slide level1"
+data-transition="zoom">
+<h1 data-transition="zoom">Conclusioni</h1>
+<div class="fragment">
+<p>L’impiego di <strong>MPI</strong> in una simulazione di un sistema
+<strong>Gray-Scott</strong> risulta <strong>valido</strong> per
+accelerare le elaborazioni, anche sul mio semplice <strong>personal
+computer</strong>.</p>
+</div>
+</section>
+<section id="riferimenti" class="title-slide slide level2">
+<h2>Riferimenti</h2>
+<ul>
+<li><p><a
+href="https://itp.uni-frankfurt.de/~gros/StudentProjects/Projects_2020/projekt_schulz_kaefer/">Gray-Scott
+Model of a Reaction-Diffusion System, Katharina Käfer, Mirjam
+Schulz</a></p></li>
+<li><p><a href="https://mrob.com/pub/comp/xmorphia/">Reaction-Diffusion
+by the Gray-Scott Model: Pearson’s Parametrization, Robert
+Munafo</a></p></li>
+<li><p><a
+href="https://pnavaro.github.io/python-fortran/06.gray-scott-model.html">Gray-Scott
+Model, Pierre Navaro</a></p></li>
+</ul>
+</section>
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
